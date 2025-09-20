@@ -1,5 +1,6 @@
 class Estudante:
 
-    def __init__(self, id, nome):
+    def __init__(self, id, nome, data_nascimento=None):
         self.id = id
         self.nome = nome
+        self.data_nascimento = data_nascimento

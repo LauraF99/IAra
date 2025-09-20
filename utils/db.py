@@ -14,6 +14,15 @@ def init_db():
             nome TEXT
         )                   
     """)
+     # Verifica se a coluna 'data_nascimento' já existe
+    cursor.execute("PRAGMA table_info(estudantes)")
+    colunas = [coluna[1] for coluna in cursor.fetchall()]
+
+    if "data_nascimento" not in colunas:
+        cursor.execute("""
+            ALTER TABLE estudantes ADD COLUMN data_nascimento TEXT
+        """)
+
 
     # Documentos
     cursor.execute("""
@@ -23,5 +32,14 @@ def init_db():
             data_upload TEXT
         )
     """)    
+    
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS usuarios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT UNIQUE,
+            senha TEXT
+        )
+    """)   
+    
     conn.commit()
     conn.close()
