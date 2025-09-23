@@ -33,6 +33,27 @@ def show():
 
    
     df["Idade"] = df["Data de Nascimento"].apply(calcular_idade)
+    
+    # --- Filtros ---
+    st.sidebar.header("Filtros")
+
+    nome_filtro = st.sidebar.text_input("Filtrar por nome")
+    idade_min = st.sidebar.number_input("Idade mínima", min_value=0, max_value=100, value=0)
+    idade_max = st.sidebar.number_input("Idade máxima", min_value=0, max_value=100, value=100)
+    data_inicio = st.sidebar.date_input("Data de nascimento inicial", value=datetime(1990, 1, 1))
+    data_fim = st.sidebar.date_input("Data de nascimento final", value=datetime.now())
+
+    if nome_filtro:
+        df = df[df["Nome"].str.contains(nome_filtro, case=False)]
+
+    if idade_min or idade_max:
+        df = df[(df["Idade"] >= idade_min) & (df["Idade"] <= idade_max)]
+
+    if data_inicio or data_fim:
+        df = df[
+            (pd.to_datetime(df["Data de Nascimento"], errors="coerce") >= pd.to_datetime(data_inicio)) &
+            (pd.to_datetime(df["Data de Nascimento"], errors="coerce") <= pd.to_datetime(data_fim))
+        ]
 
 
     st.subheader("Lista de Alunos")
